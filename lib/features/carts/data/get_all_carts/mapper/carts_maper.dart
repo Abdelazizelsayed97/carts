@@ -2,25 +2,35 @@ import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_al
 
 import '../models/get_all_carts.dart';
 
-extension ConvertApiGetAllCartsToGatAllCarts on ApiGetAllCarts {
+extension ConvertApiGetAllCartsToGatAllCarts on ApiCartsModel {
   GetAllCartsEntity mapAllCarts() {
     return GetAllCartsEntity(
-        limit: limit,
-        carts: carts?.map((e) => e.mapCart()).toList(),
-        skip: skip,
-        total: total);
+      carts: carts?.map((e) => e.mapCart()).toList(),
+      limitEnt: limit,
+      skipEnt: skip,
+      totalEnt: total,
+    );
   }
 }
 
-extension ConvertPostsEntityToApiPostsDataEntity on Cart {
+extension ConvertPostsEntityToApiPostsDataEntity on ApiCart {
   Carts mapCart() {
     return Carts(
         cartId: id ?? 0, items: products!.map((e) => e.proMap()).toList());
   }
 }
 
-extension ConvertApiProductsToProducts on Product {
+extension ConvertApiProductsToProducts on ApiProduct {
   Products proMap() {
-    return Products(title: title, thumbnail: thumbnail);
+    return Products(
+      title: title,
+      thumbnail: thumbnail,
+      total: total,
+      discountedPrice: discountedPrice,
+      discountPercentage: discountPercentage,
+      iD: id,
+      price: price,
+      quantity: quantity,
+    );
   }
 }

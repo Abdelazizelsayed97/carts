@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'core/di/app_di.dart';
 import 'features/carts/ui/pages/carts/carts_page.dart';
 
 void main() {
   runApp(const CartsApp());
+  WidgetsFlutterBinding.ensureInitialized();
+    setupGetIt();
 }
 
 class CartsApp extends StatelessWidget {
@@ -17,7 +20,7 @@ class CartsApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: CartsViewPage(),
+          body: CratsViewPage(),
         ),
       ),
     );

@@ -17,20 +17,16 @@ class PaginatedData<T> extends Equatable {
 }
 
 class PageInfo extends Equatable {
-  final int page;
-  final int limit;
-  final bool hasNext;
+  final int? total;
+  final int? skip;
+  final int? limit;
 
-  const PageInfo({
-    required this.page,
-    required this.limit,
-    required this.hasNext,
+  const PageInfo( {this.total, this.skip, this.limit,
+
   });
 
   @override
   List<Object?> get props => [
-        page,
-        limit,
-        hasNext,
+    total,skip,limit
       ];
 }

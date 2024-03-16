@@ -1,3 +1,4 @@
 
-
-const String baseUrl ="https://dummyjson.com/carts";
+class ApiConstants {
+  static const String baseUrl ="https://dummyjson.com/carts";
+}

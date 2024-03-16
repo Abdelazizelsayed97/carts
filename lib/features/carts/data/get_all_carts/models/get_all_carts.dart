@@ -1,83 +1,82 @@
-// class GetAllCartsModel{
-//   final int id ;
-//   final Products products;
+// To parse this JSON data, do
 //
-//   GetAllCartsModel(this.id, this.products);
-// }
-//
-// class Products {
-// final String title;
-// final String thumbnail;
-//
-//   Products(this.title, this.thumbnail);
-//
-// }
+//     final cartsModel = cartsModelFromJson(jsonString);
 
-class ApiGetAllCarts {
-  final List<Cart>? carts;
+import 'dart:convert';
+
+ApiCartsModel cartsModelFromJson(String str) => ApiCartsModel.fromJson(json.decode(str));
+
+String cartsModelToJson(ApiCartsModel data) => json.encode(data.toJson());
+
+class ApiCartsModel {
+  final List<ApiCart>? carts;
   final int? total;
   final int? skip;
   final int? limit;
 
-  ApiGetAllCarts({
+  ApiCartsModel({
     this.carts,
     this.total,
     this.skip,
     this.limit,
   });
 
-  factory ApiGetAllCarts.fromJson(Map<String, dynamic> json) {
-    List<dynamic>? cartsJson = json['carts'];
-    List<Cart>? carts = cartsJson?.map((cartJson) => Cart.fromJson(cartJson)).toList();
+  factory ApiCartsModel.fromJson(Map<String, dynamic> json) => ApiCartsModel(
+    carts: json["carts"] == null ? [] : List<ApiCart>.from(json["carts"]!.map((x) => ApiCart.fromJson(x))),
+    total: json["total"],
+    skip: json["skip"],
+    limit: json["limit"],
+  );
 
-    return ApiGetAllCarts(
-      carts: carts,
-      total: json['total'],
-      skip: json['skip'],
-      limit: json['limit'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>>? cartsJson = carts?.map((cart) => cart.toJson()).toList();
-    return {
-      'carts': cartsJson,
-      'total': total,
-      'skip': skip,
-      'limit': limit,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "carts": carts == null ? [] : List<dynamic>.from(carts!.map((x) => x.toJson())),
+    "total": total,
+    "skip": skip,
+    "limit": limit,
+  };
 }
 
-class Cart {
+class ApiCart {
   final int? id;
-  final List<Product>? products;
+  final List<ApiProduct>? products;
+  final int? total;
+  final int? discountedTotal;
+  final int? userId;
+  final int? totalProducts;
+  final int? totalQuantity;
 
-  Cart({
+  ApiCart({
     this.id,
     this.products,
+    this.total,
+    this.discountedTotal,
+    this.userId,
+    this.totalProducts,
+    this.totalQuantity,
   });
 
-  factory Cart.fromJson(Map<String, dynamic> json) {
-    List<dynamic>? productsJson = json['products'];
-    List<Product>? products = productsJson?.map((productJson) => Product.fromJson(productJson)).toList();
+  factory ApiCart.fromJson(Map<String, dynamic> json) => ApiCart(
+    id: json["id"],
+    products: json["products"] == null ? [] : List<ApiProduct>.from(json["products"]!.map((x) => ApiProduct.fromJson(x))),
+    total: json["total"],
+    discountedTotal: json["discountedTotal"],
+    userId: json["userId"],
+    totalProducts: json["totalProducts"],
+    totalQuantity: json["totalQuantity"],
+  );
 
-    return Cart(
-      id: json['id'],
-      products: products,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    List<Map<String, dynamic>>? productsJson = products?.map((product) => product.toJson()).toList();
-    return {
-      'id': id,
-      'products': productsJson,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "products": products == null ? [] : List<dynamic>.from(products!.map((x) => x.toJson())),
+    "total": total,
+    "discountedTotal": discountedTotal,
+    "userId": userId,
+    "totalProducts": totalProducts,
+    "totalQuantity": totalQuantity,
+  };
 }
 
-class Product {
+class ApiProduct {
   final int? id;
   final String? title;
   final int? price;
@@ -87,7 +86,7 @@ class Product {
   final int? discountedPrice;
   final String? thumbnail;
 
-  Product({
+  ApiProduct({
     this.id,
     this.title,
     this.price,
@@ -98,30 +97,25 @@ class Product {
     this.thumbnail,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['id'],
-      title: json['title'],
-      price: json['price'],
-      quantity: json['quantity'],
-      total: json['total'],
-      discountPercentage: json['discountPercentage'],
-      discountedPrice: json['discountedPrice'],
-      thumbnail: json['thumbnail'],
-    );
-  }
+  factory ApiProduct.fromJson(Map<String, dynamic> json) => ApiProduct(
+    id: json["id"],
+    title: json["title"],
+    price: json["price"],
+    quantity: json["quantity"],
+    total: json["total"],
+    discountPercentage: json["discountPercentage"]?.toDouble(),
+    discountedPrice: json["discountedPrice"],
+    thumbnail: json["thumbnail"],
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'price': price,
-      'quantity': quantity,
-      'total': total,
-      'discountPercentage': discountPercentage,
-      'discountedPrice': discountedPrice,
-      'thumbnail': thumbnail,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "price": price,
+    "quantity": quantity,
+    "total": total,
+    "discountPercentage": discountPercentage,
+    "discountedPrice": discountedPrice,
+    "thumbnail": thumbnail,
+  };
 }
-

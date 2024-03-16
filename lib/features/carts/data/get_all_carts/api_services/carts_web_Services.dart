@@ -1,43 +1,43 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
-import 'package:product_cart/core/error_handler/error_handler.dart';
-import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:product_cart/core/error_handler/error_handler.dart';
+import 'package:product_cart/core/helper/pagination.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
-import '../../../../../core/constants/constants.dart';
+import '../models/get_all_carts.dart';
 
 class GetAllCartsWebServices {
-  var dio = Dio();
+  final Dio dio = Dio();
 
-
-  Future<Either<ApiError, List<Carts>>> getAllCarts() async {
+  Future<Either<ApiError, PaginatedData<Carts>>> getAllCarts() async {
     Response response = await dio.request(
       'https://dummyjson.com/carts',
       options: Options(
         method: 'GET',
       ),
     );
+    final result = ApiCartsModel.fromJson(response.data).carts;
 
     try {
+      json.encode(response.data);
       if (response.statusCode == 200) {
-        print(json.encode(response.data));
-        return response.data;
-      }
-      else {
+
+
+        return Right(response.data);
+      } else {
         ApiError(message: response.statusMessage);
         print(response.statusMessage);
       }
     } catch (e) {
       e.toString();
     }
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ${response.data}');
+    return response.data;
 
-    throw Exception();
   }
-
-
 }
-
 
 // class CharactersWebServices {
 //   Dio dio = Dio();
