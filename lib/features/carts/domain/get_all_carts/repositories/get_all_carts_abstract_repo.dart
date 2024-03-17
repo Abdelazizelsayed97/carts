@@ -8,5 +8,5 @@ import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_al
 import '../../../../../core/error_handler/error_handler.dart';
 
 abstract class GetAllCartsRepository {
-  Future<Either<ApiError, PaginatedData<Carts>>> getAllPosts(int pageKey);
+  Future<Either<ApiError, PaginatedData<Carts>>> getAllCarts(int pageKey);
 }

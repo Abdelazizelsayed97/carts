@@ -15,7 +15,7 @@ class CartsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenUtilInit(
+    return  const ScreenUtilInit(
       designSize: Size(375, 811),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

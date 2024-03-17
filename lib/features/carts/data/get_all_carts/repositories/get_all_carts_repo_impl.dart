@@ -16,7 +16,7 @@ class GetAllCartsRepositoriesImpl implements GetAllCartsRepository {
   GetAllCartsRepositoriesImpl(this.getAllCartsWebServices);
 
   @override
-  Future<Either<ApiError, PaginatedData<Carts>>> getAllPosts(
+  Future<Either<ApiError, PaginatedData<Carts>>> getAllCarts(
       int pageKey) async {
     final Uri uri = Uri.parse(ApiConstants.baseUrl);
 
@@ -28,8 +28,6 @@ class GetAllCartsRepositoriesImpl implements GetAllCartsRepository {
       try {
         if (response.statusCode == 200) {
           final result = cartsModelFromJson(response.body);
-          print(
-              '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${result.carts!.map((e) => e.mapCart()).toList()}');
 
           return right(PaginatedData(result.total, result.skip, result.limit,
               dataItems: result.carts!.map((e) => e.mapCart()).toList()));

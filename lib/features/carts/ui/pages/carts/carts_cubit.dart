@@ -12,10 +12,10 @@ class CartsCubit extends Cubit<CartsState> {
   final GetAllCartsUseCase getAllCartsUseCase;
   CartsCubit( this.getAllCartsUseCase) : super(CartsInitialState());
 
-  Future getAllPosts(int pageKey) async {
+  Future getAllCarts(int pageKey) async {
 
     emit(CartsInitialState());
-    final response = await getAllCartsUseCase.repository.getAllPosts(pageKey);
+    final response = await getAllCartsUseCase.repository.getAllCarts(pageKey);
     print('########±##########################################${response}');
     emit(CartsInitialState());
     response.fold((l) {

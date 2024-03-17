@@ -21,20 +21,33 @@ class CartWidgetBody extends StatefulWidget {
 class _CartWidgetBodyState extends State<CartWidgetBody> {
   final List<Carts> products;
   final int indexed;
-  late final List xx;
-
   final String text;
-
   bool selected = false;
 
   _CartWidgetBodyState(
       {required this.indexed, required this.text, required this.products});
 
+  List<Products> cartItems = [];
+
+  void addToCart(Products item) {
+    setState(() {
+      cartItems.add(item);
+    });
+  }
+
+  void removeFromCart(Products item) {
+    setState(() {
+      cartItems.remove(item);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('##########################${cartItems}');
     return Container(
         decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(50))),
+            borderRadius: BorderRadius.all(Radius.circular(19))),
         child: ExpansionTile(
           shape: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
@@ -43,11 +56,12 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
           ),
           collapsedShape: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(19))),
-          collapsedBackgroundColor: Colors.grey.shade400,
-          backgroundColor: Colors.grey.shade300,
+          collapsedBackgroundColor: Colors.blue.shade200,
+          backgroundColor: Colors.yellow[50],
           title: Text('Cart $text'),
           children: [
             ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -56,10 +70,16 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                         child: Image.network(
                             scale: 10,
                             fit: BoxFit.cover,
-                            products[indexed].items[index].thumbnail ?? ''),
+                            products[indexed].items[index].thumbnail.toString() ?? ''),
                       ),
                       trailing: TextButton(
                         onPressed: () {
+                          
+                          if (selected = false) {
+                            addToCart(products[indexed].items[index]);
+                          } else {
+                            removeFromCart(products[indexed].items[index]);
+                          }
                           selected != selected;
                           setState(() {});
                         },
@@ -80,5 +100,33 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                 itemCount: products.first.items.length),
           ],
         ));
+  }
+
+  Widget builds(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Shopping Cart'),
+      ),
+      body: ListView.builder(
+        itemCount: cartItems.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(cartItems[index].title ?? ""),
+            trailing: IconButton(
+              icon: const Icon(Icons.remove_shopping_cart),
+              onPressed: () {
+                removeFromCart(cartItems[index]);
+              },
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addToCart("Item ${cartItems.length + 1}" as Products);
+        },
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
