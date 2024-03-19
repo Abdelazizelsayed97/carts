@@ -20,7 +20,7 @@ class CartsApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: CratsViewPage(),
+          body: CartsViewPage(),
         ),
       ),
     );

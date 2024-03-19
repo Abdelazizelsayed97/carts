@@ -43,7 +43,7 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('##########################${cartItems}');
+    print('???##########################${cartItems}');
     return Container(
         decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
@@ -56,12 +56,12 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
           ),
           collapsedShape: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(19))),
-          collapsedBackgroundColor: Colors.blue.shade200,
+          collapsedBackgroundColor: Colors.black26,
           backgroundColor: Colors.yellow[50],
           title: Text('Cart $text'),
           children: [
             ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -70,11 +70,14 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                         child: Image.network(
                             scale: 10,
                             fit: BoxFit.cover,
-                            products[indexed].items[index].thumbnail.toString() ?? ''),
+                            products[indexed]
+                                    .items[index]
+                                    .thumbnail
+                                    .toString() ??
+                                ''),
                       ),
                       trailing: TextButton(
                         onPressed: () {
-                          
                           if (selected = false) {
                             addToCart(products[indexed].items[index]);
                           } else {
@@ -97,36 +100,37 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                 separatorBuilder: (context, index) {
                   return verticalSpace(20);
                 },
-                itemCount: products.first.items.length),
+                itemCount: 5
+                // products.first.items.length
+            ),
           ],
         ));
   }
-
-  Widget builds(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping Cart'),
-      ),
-      body: ListView.builder(
-        itemCount: cartItems.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(cartItems[index].title ?? ""),
-            trailing: IconButton(
-              icon: const Icon(Icons.remove_shopping_cart),
-              onPressed: () {
-                removeFromCart(cartItems[index]);
-              },
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          addToCart("Item ${cartItems.length + 1}" as Products);
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
+  // Widget builds(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text('Shopping Cart'),
+  //     ),
+  //     body: ListView.builder(
+  //       itemCount: cartItems.length,
+  //       itemBuilder: (context, index) {
+  //         return ListTile(
+  //           title: Text(cartItems[index].title ?? ""),
+  //           trailing: IconButton(
+  //             icon: const Icon(Icons.remove_shopping_cart),
+  //             onPressed: () {
+  //               removeFromCart(cartItems[index]);
+  //             },
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //     floatingActionButton: FloatingActionButton(
+  //       onPressed: () {
+  //         addToCart("Item ${cartItems.length + 1}" as Products);
+  //       },
+  //       child: Icon(Icons.add),
+  //     ),
+  //   );
+  // }
 }

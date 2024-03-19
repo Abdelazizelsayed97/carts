@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:product_cart/features/search/ui/widgets/search_widget.dart';
 
-import '../../../carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import '../../carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
 class SearchPage extends StatefulWidget {
   final List<Carts> carts;
@@ -28,6 +29,7 @@ class _SearchPageState extends State<SearchPage> {
   void searchFilter(String entryKeyWord) {
     List<Carts> result = [];
     if (entryKeyWord.isNotEmpty) {
+
       for (var i = 0; i < searchList.length; i++) {
         if (searchList[i]
             .items[i]
@@ -42,8 +44,8 @@ class _SearchPageState extends State<SearchPage> {
       });
     } else {
       // setState(() {
-      //   result = carts.cast<Products>().where((element) {
-      //     return element['title']
+      //   result = carts.where((element) {
+      //     return element[result.map((e) => e.items)]
       //         .toString()
       //         .toLowerCase()
       //         .contains(entryKeyWord.toLowerCase());
@@ -66,6 +68,9 @@ class _SearchPageState extends State<SearchPage> {
         SizedBox(
           height: 50.h,
           child: TextFormField(
+            onTap: (){
+              showSearch(context: context, delegate:CartProductSearchDelegate(carts) );
+            },
             onChanged: (value) => searchFilter(value),
             cursorHeight: 30,
             decoration: const InputDecoration(
@@ -76,6 +81,7 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)))),
           ),
         ),
+
       ],
     );
   }

@@ -19,58 +19,12 @@ Future<void> setupGetIt() async {
   getIt.registerFactory<ApiConstants>(() => ApiConstants());
   getIt.registerFactory<GetAllCartsWebServices>(() => GetAllCartsWebServices());
   getIt.registerFactory<GetAllCartsRepository>(
-      () => GetAllCartsRepositoriesImpl(getIt()));
+      () => GetAllCartsRepositoriesImpl());
   getIt.registerFactory<CartsCubit>(() => CartsCubit(getIt()));
 
   getIt.registerFactory<GetAllCartsUseCase>(
     () => GetAllCartsUseCase(getIt<GetAllCartsRepository>()),
   );
-
-  // getIt.registerLazySingleton<GetAllCartsRepository>(
-  //   () => GetAllCartsRepositoriesImpl(
-  //     getIt<GetAllCartsWebServices>(),
-  //   ),
-  // );
 }
 
-// final sl = GetIt.instance;   GetAllCartsUseCase
-//
-// Future<void> init() async {
-// //! Features - posts
-//
-// // Bloc
-//
-//   sl.registerFactory(() => CartsCubit(getAllCartsUseCase: sl()));
-//
-//     // Dio & ApiService
-//   Dio dio = DioFactory.getDio();
-//   sl.registerLazySingleton<ApiService>(() => ApiService(dio));
-//
-// // Usecases
-//
-//   sl.registerLazySingleton(() => GetAllCartsUseCase(sl()));
-//
-//
-// // Repository
-//
-//   sl.registerLazySingleton<GetAllCartsRepository>(() => GetAllCartsRepositoriesImpl(
-//      getAllCartsWebServices: sl(), ));
-//
-// // Datasources
-//
-//   sl.registerLazySingleton<GetAllCartsWebServices>(
-//           () => GetAllCartsWebServices());
-//   // sl.registerLazySingleton<GetAllCartsWebServices>(
-//   //         () => GetAllCartsRepositoriesImpl(getAllCartsWebServices: sl()));
-//
-// //! Core
-//
-//
-// //! External
-//
-//
-//   // final sharedPreferences = await SharedPreferences.getInstance();
-//   // sl.registerLazySingleton(() => sharedPreferences);
-//   // sl.registerLazySingleton(() => Uri.http(authority).Client());
-//   // sl.registerLazySingleton(() => InternetConnectionChecker());
-// }
+

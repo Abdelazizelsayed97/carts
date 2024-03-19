@@ -21,7 +21,6 @@ class GetAllCartsEntity extends Equatable {
 class Carts {
   final int cartId;
   final List<Products> items;
-
   Carts({required this.cartId, required this.items});
 }
 

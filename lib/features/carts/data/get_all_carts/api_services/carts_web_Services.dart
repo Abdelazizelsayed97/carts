@@ -13,7 +13,7 @@ class GetAllCartsWebServices {
 
   Future<Either<ApiError, PaginatedData<Carts>>> getAllCarts() async {
     Response response = await dio.request(
-      'https://dummyjson.com/carts',
+      'https://dummyjson.com/carts?limit=10&skip=0',
       options: Options(
         method: 'GET',
       ),

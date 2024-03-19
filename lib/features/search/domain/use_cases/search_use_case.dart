@@ -9,7 +9,7 @@ class SearchUseCase {
 
   SearchUseCase(this.repository);
   Future<Either<ApiError,PaginatedData<Carts>>> execute()async{
-    return await repository.getAllCarts(1);
+    return await repository.fetchData(1);
   }
 
 }
