@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/di/app_di.dart';
-import 'features/carts/ui/pages/carts/carts_page.dart';
+import 'features/carts/ui/pages/carts/get_carts/carts_page.dart';
 
 void main() {
   runApp(const CartsApp());

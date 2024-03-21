@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:product_cart/core/app_colors/app_colors.dart';
 import 'package:product_cart/core/helper/spacing.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+
+import '../../../../../../widgets/button_widget.dart';
 
 class CartWidgetBody extends StatefulWidget {
   final List<Carts> carts;
@@ -15,19 +18,19 @@ class CartWidgetBody extends StatefulWidget {
 
   @override
   State<CartWidgetBody> createState() =>
-      _CartWidgetBodyState(products: carts, text: text, indexed: indexed);
+      CartWidgetBodyState(products: carts, text: text, indexed: indexed);
 }
 
-class _CartWidgetBodyState extends State<CartWidgetBody> {
+class CartWidgetBodyState extends State<CartWidgetBody> {
   final List<Carts> products;
   final int indexed;
   final String text;
-  bool selected = false;
+  bool selected = true;
 
-  _CartWidgetBodyState(
+  CartWidgetBodyState(
       {required this.indexed, required this.text, required this.products});
 
-  List<Products> cartItems = [];
+  static List<Products> cartItems = [];
 
   void addToCart(Products item) {
     setState(() {
@@ -56,8 +59,8 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
           ),
           collapsedShape: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(19))),
-          collapsedBackgroundColor: Colors.black26,
-          backgroundColor: Colors.yellow[50],
+          collapsedBackgroundColor: ColorsManger.primaryColor,
+          backgroundColor: ColorsManger.secondaryColor,
           title: Text('Cart $text'),
           children: [
             ListView.separated(
@@ -76,23 +79,15 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                                     .toString() ??
                                 ''),
                       ),
-                      trailing: TextButton(
-                        onPressed: () {
-                          if (selected = false) {
-                            addToCart(products[indexed].items[index]);
-                          } else {
-                            removeFromCart(products[indexed].items[index]);
-                          }
-                          selected != selected;
-                          setState(() {});
+                      trailing: AddRemoveButton(
+                        onPressed: (selected) {
+                          setState(() {
+                            selected != selected;
+                          });
+                          selected
+                              ? addToCart(products[indexed].items[index])
+                              : removeFromCart(products[indexed].items[index]);
                         },
-                        child: Text(
-                          (selected = false) ? "Remove" : 'Add',
-                          style: TextStyle(
-                              color: (selected = false)
-                                  ? Colors.red
-                                  : Colors.green),
-                        ),
                       ),
                       subtitle:
                           Text(products[indexed].items[index].title ?? ""));
@@ -100,37 +95,8 @@ class _CartWidgetBodyState extends State<CartWidgetBody> {
                 separatorBuilder: (context, index) {
                   return verticalSpace(20);
                 },
-                itemCount: 5
-                // products.first.items.length
-            ),
+                itemCount: products[indexed].items.length),
           ],
         ));
   }
-  // Widget builds(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text('Shopping Cart'),
-  //     ),
-  //     body: ListView.builder(
-  //       itemCount: cartItems.length,
-  //       itemBuilder: (context, index) {
-  //         return ListTile(
-  //           title: Text(cartItems[index].title ?? ""),
-  //           trailing: IconButton(
-  //             icon: const Icon(Icons.remove_shopping_cart),
-  //             onPressed: () {
-  //               removeFromCart(cartItems[index]);
-  //             },
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //     floatingActionButton: FloatingActionButton(
-  //       onPressed: () {
-  //         addToCart("Item ${cartItems.length + 1}" as Products);
-  //       },
-  //       child: Icon(Icons.add),
-  //     ),
-  //   );
-  // }
 }

@@ -70,6 +70,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextFormField(
             onTap: (){
               showSearch(context: context, delegate:CartProductSearchDelegate(carts) );
+              print('***************************${carts}');
             },
             onChanged: (value) => searchFilter(value),
             cursorHeight: 30,

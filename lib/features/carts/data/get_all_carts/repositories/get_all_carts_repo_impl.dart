@@ -9,7 +9,7 @@ import 'package:product_cart/features/carts/domain/get_all_carts/repositories/ge
 import '../../../../../core/helper/pagination.dart';
 import '../models/get_all_carts.dart';
 
-class GetAllCartsRepositoriesImpl implements GetAllCartsRepository {
+class GetAllCartsRepositoriesImpl implements GetCartsRepository {
   GetAllCartsRepositoriesImpl();
 
   @override

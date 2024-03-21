@@ -7,6 +7,6 @@ import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_al
 
 import '../../../../../core/error_handler/error_handler.dart';
 
-abstract class GetAllCartsRepository {
+abstract class GetCartsRepository {
   Future<Either<ApiError, PaginatedData<Carts>>> fetchData(int limit);
 }

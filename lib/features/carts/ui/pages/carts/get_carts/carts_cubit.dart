@@ -5,18 +5,17 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
-import '../../../../../core/helper/pagination.dart';
-import '../../../domain/get_all_carts/use_cases/get_all_carts_use_case.dart';
+import '../../../../../../core/helper/pagination.dart';
+import '../../../../domain/get_all_carts/use_cases/get_all_carts_use_case.dart';
 
 part 'carts_state.dart';
 
 class CartsCubit extends Cubit<CartsState> {
-  final GetAllCartsUseCase getAllCartsUseCase;
+  final GetCartsUseCase getAllCartsUseCase;
 
   CartsCubit(this.getAllCartsUseCase) : super(CartsInitialState());
-  List<Carts> newCarts = [];
 
-  Future fetchData(int limit) async {
+  Future<void> fetchData(int limit) async {
     emit(CartsInitialState());
     final response = await getAllCartsUseCase.fetchData(limit: limit, skip: 0);
     print('########±##########################################${response}');
@@ -26,33 +25,32 @@ class CartsCubit extends Cubit<CartsState> {
         emit(CartsFailureState(message: l.message ?? ""));
       },
       (r) async {
-        emit(CartsSuccessState(r));
+        emit(CartsSuccessState(
+          r,
+        ));
       },
     );
   }
 
-  void loadMoreCarts({required int limit}) async {
+  Future<List<Carts>?> loadMoreCarts({required int limit}) async {
     final newCarts = await getAllCartsUseCase.fetchData(
-      limit: 10,
-      skip: _currentPage * 10,
+      limit: limit,
+      skip: 0,
     );
     newCarts.fold((l) => emit(CartsFailureState(message: l.message ?? "")),
-        (r) {
+        (r) async {
       emit(CartsSuccessState(r));
-      _carts.addAll(r.dataItems);
-      _cartsController.sink.add(_carts);
-      _currentPage++;
     });
+    return null;
   }
-}
 
-final _cartsController = StreamController<List<Carts>>();
-
-Stream<List<Carts>> get cartsStream => _cartsController.stream;
-
-int _currentPage = 0;
-List<Carts> _carts = [];
-
-void dispose() {
-  _cartsController.close();
+// void addProduct(Products product) {
+//   final List<Products> updatedCart = List.from()..add(product);
+//   emit();
+// }
+//
+// void removeProduct(String product) {
+//   final List<String> updatedCart = List.from(state)..remove(product);
+//   emit();
+// }
 }

@@ -5,7 +5,7 @@ import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_al
 import 'package:product_cart/features/carts/domain/get_all_carts/repositories/get_all_carts_abstract_repo.dart';
 
 class SearchUseCase {
-   final GetAllCartsRepository repository;
+   final GetCartsRepository repository;
 
   SearchUseCase(this.repository);
   Future<Either<ApiError,PaginatedData<Carts>>> execute()async{
