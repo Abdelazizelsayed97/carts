@@ -18,3 +18,4 @@ class SearchCubit extends Cubit<SearchState> {
         (r) => emit(SearchSuccess(r.dataItems.map((e) => e.items))));
   }
 }
+

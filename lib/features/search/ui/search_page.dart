@@ -26,41 +26,6 @@ class _SearchPageState extends State<SearchPage> {
 
   _SearchPageState({required this.carts});
 
-  void searchFilter(String entryKeyWord) {
-    List<Carts> result = [];
-    if (entryKeyWord.isNotEmpty) {
-
-      for (var i = 0; i < searchList.length; i++) {
-        if (searchList[i]
-            .items[i]
-            .title!
-            .toLowerCase()
-            .contains(entryKeyWord.toLowerCase())) {
-          result.add(searchList[i]);
-        }
-      }
-      setState(() {
-        searchList = result;
-      });
-    } else {
-      // setState(() {
-      //   result = carts.where((element) {
-      //     return element[result.map((e) => e.items)]
-      //         .toString()
-      //         .toLowerCase()
-      //         .contains(entryKeyWord.toLowerCase());
-      //   }).toList();
-      // });
-
-      setState(() {
-        result = carts;
-      });
-    }
-    setState(() {
-      searchList = result;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,11 +33,11 @@ class _SearchPageState extends State<SearchPage> {
         SizedBox(
           height: 50.h,
           child: TextFormField(
-            onTap: (){
-              showSearch(context: context, delegate:CartProductSearchDelegate(carts) );
+            onTap: () {
+              showSearch(
+                  context: context, delegate: CartProductSearchDelegate(carts));
               print('***************************${carts}');
             },
-            onChanged: (value) => searchFilter(value),
             cursorHeight: 30,
             decoration: const InputDecoration(
                 filled: true,
@@ -82,7 +47,6 @@ class _SearchPageState extends State<SearchPage> {
                     borderRadius: BorderRadius.all(Radius.circular(20)))),
           ),
         ),
-
       ],
     );
   }

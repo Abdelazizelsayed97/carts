@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:product_cart/core/app_colors/app_colors.dart';
+import 'package:product_cart/core/text_styles/app_text_styles.dart';
 
 import '../../../carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
@@ -37,7 +39,8 @@ class CartProductSearchDelegate extends SearchDelegate {
     }).toList();
 
     return ListView.builder(
-      itemCount: filteredCarts.length,
+
+      itemCount: filteredCarts.map((e) => e.items).length,
       itemBuilder: (context, index) {
         final itemTitles =
             filteredCarts[index].items.map((item) => item.title).join(', ');
@@ -61,10 +64,16 @@ class CartProductSearchDelegate extends SearchDelegate {
 
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: filteredCarts.length,
+      itemCount: filteredCarts.map((e) => e.items).length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(filteredCarts[index].items[index].title ?? ''),
+          title: Text(
+            'Cart${filteredCarts[index].cartId.toString()}',
+            style: AppTextStyles.bold(fontSize: 20),
+          ),
+          subtitle: Text(
+            filteredCarts[index].items.map((e) => e.title).toString(),
+          ),
           onTap: () {
             query = filteredCarts[index].items[index].title ?? '';
             showResults(context);

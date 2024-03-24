@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 
 import 'core/di/app_di.dart';
 import 'features/carts/ui/pages/carts/get_carts/carts_page.dart';
@@ -7,7 +9,7 @@ import 'features/carts/ui/pages/carts/get_carts/carts_page.dart';
 void main() {
   runApp(const CartsApp());
   WidgetsFlutterBinding.ensureInitialized();
-    setupGetIt();
+  setupGetIt();
 }
 
 class CartsApp extends StatelessWidget {
@@ -15,7 +17,7 @@ class CartsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const ScreenUtilInit(
+    return const ScreenUtilInit(
       designSize: Size(375, 811),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

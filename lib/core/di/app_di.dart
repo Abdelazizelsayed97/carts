@@ -7,16 +7,16 @@ import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit
 import '../../features/carts/domain/get_all_carts/use_cases/get_all_carts_use_case.dart';
 import '../constants/constants.dart';
 
-final GetIt getIt = GetIt.instance;
+final GetIt inject = GetIt.instance;
 
 Future<void> setupGetIt() async {
-  getIt.registerFactory<ApiConstants>(() => ApiConstants());
-  getIt.registerFactory<GetCartsRepository>(
+  inject.registerFactory<ApiConstants>(() => ApiConstants());
+  inject.registerFactory<GetCartsRepository>(
       () => GetAllCartsRepositoriesImpl());
-  getIt.registerFactory<CartsCubit>(() => CartsCubit(getIt()));
+  inject.registerFactory<CartsCubit>(() => CartsCubit(inject()));
 
-  getIt.registerFactory<GetCartsUseCase>(
-    () => GetCartsUseCase(getIt<GetCartsRepository>()),
+  inject.registerFactory<GetCartsUseCase>(
+    () => GetCartsUseCase(inject<GetCartsRepository>()),
   );
 }
 

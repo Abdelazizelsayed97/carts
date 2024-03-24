@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_cart/core/app_colors/app_colors.dart';
 import 'package:product_cart/core/helper/spacing.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 
-import '../../../../../../widgets/button_widget.dart';
+import 'button_widget.dart';
 
 class CartWidgetBody extends StatefulWidget {
   final List<Carts> carts;
@@ -26,22 +28,15 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
   final int indexed;
   final String text;
   bool selected = true;
+  final ExpansionTileController controller = ExpansionTileController();
+  static List<Products> cartItems = [];
 
   CartWidgetBodyState(
       {required this.indexed, required this.text, required this.products});
-
-  static List<Products> cartItems = [];
-
-  void addToCart(Products item) {
-    setState(() {
-      cartItems.add(item);
-    });
-  }
-
-  void removeFromCart(Products item) {
-    setState(() {
-      cartItems.remove(item);
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -52,6 +47,7 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(19))),
         child: ExpansionTile(
+
           shape: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(19),
@@ -70,23 +66,26 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
                   return ListTile(
                       title: Align(
                         alignment: Alignment.topLeft,
-                        child: Image.network(
-                            scale: 10,
-                            fit: BoxFit.cover,
-                            products[indexed]
-                                    .items[index]
-                                    .thumbnail
-                                    .toString() ??
-                                ''),
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(products[indexed]
+                              .items[index]
+                              .thumbnail
+                              .toString()),
+                        ),
                       ),
                       trailing: AddRemoveButton(
+                        element: products[indexed].items[index],
                         onPressed: (selected) {
                           setState(() {
                             selected != selected;
+                            selected
+                                ? context
+                                    .read<CartsCubit>()
+                                    .addToCart(products[indexed].items[index])
+                                : context.read<CartsCubit>().removeFromCart(
+                                    products[indexed].items[index]);
                           });
-                          selected
-                              ? addToCart(products[indexed].items[index])
-                              : removeFromCart(products[indexed].items[index]);
                         },
                       ),
                       subtitle:

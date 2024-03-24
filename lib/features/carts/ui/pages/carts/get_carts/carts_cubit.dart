@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:product_cart/features/carts/ui/pages/carts/get_carts/widgets/cart_widget.dart';
 
 import '../../../../../../core/helper/pagination.dart';
 import '../../../../domain/get_all_carts/use_cases/get_all_carts_use_case.dart';
@@ -18,7 +19,6 @@ class CartsCubit extends Cubit<CartsState> {
   Future<void> fetchData(int limit) async {
     emit(CartsInitialState());
     final response = await getAllCartsUseCase.fetchData(limit: limit, skip: 0);
-    print('########±##########################################${response}');
     emit(CartsLoadingState());
     response.fold(
       (l) {
@@ -44,13 +44,11 @@ class CartsCubit extends Cubit<CartsState> {
     return null;
   }
 
-// void addProduct(Products product) {
-//   final List<Products> updatedCart = List.from()..add(product);
-//   emit();
-// }
-//
-// void removeProduct(String product) {
-//   final List<String> updatedCart = List.from(state)..remove(product);
-//   emit();
-// }
+  void addToCart(Products item) {
+    CartWidgetBodyState.cartItems.add(item);
+  }
+
+  void removeFromCart(Products item) {
+      CartWidgetBodyState.cartItems.remove(item);
+  }
 }

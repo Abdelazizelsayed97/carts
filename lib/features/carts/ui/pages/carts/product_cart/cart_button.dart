@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_cart/core/helper/spacing.dart';
+import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 
+import '../../../../../../core/di/app_di.dart';
 import '../../../../../../core/text_styles/app_text_styles.dart';
 import '../get_carts/widgets/cart_widget.dart';
 
 class CartPreviewFloatingActionButton extends StatelessWidget {
-  CartPreviewFloatingActionButton({
-    super.key,
+  final VoidCallback onTap;
+  const CartPreviewFloatingActionButton({
+    super.key, required this.onTap,
   });
 
   @override
@@ -38,52 +42,59 @@ class CartPreviewBottomSheet extends StatefulWidget {
 class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${CartWidgetBodyState.cartItems}');
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        verticalSpace(20),
-        const Text(
-          'Cart Preview',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        verticalSpace(20),
-        Expanded(
-          child: ListView.builder(
-            itemCount: CartWidgetBodyState.cartItems.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(
-                  "${CartWidgetBodyState.cartItems[index].title}",
-                  style:
-                      AppTextStyles.normal(fontSize: 17, color: Colors.black),
-                ),
-                subtitle:
-                    Text('Price:${CartWidgetBodyState.cartItems[index].price}'),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    CartWidgetBodyState.cartItems.removeAt(index);
-                    setState(() {});
-                  },
-                  child: Text("Remove"),
-                ),
-              );
-            },
+    return BlocProvider(
+      create: (context) => CartsCubit(inject()),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          verticalSpace(20),
+          const Text(
+            'Cart Preview',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-        ),
-        SafeArea(
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll<Color>(Colors.orange.shade100)),
-            onPressed: () {},
-            child: Text(
-              'Checkout',
-              style: AppTextStyles.bold(color: Colors.black, fontSize: 17),
+          verticalSpace(20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: CartWidgetBodyState.cartItems.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    "${CartWidgetBodyState.cartItems[index].title}",
+                    style:
+                        AppTextStyles.normal(fontSize: 17, color: Colors.black),
+                  ),
+                  subtitle: Text(
+                      'Price:${CartWidgetBodyState.cartItems[index].price}',
+                      style: AppTextStyles.normal(
+                          fontSize: 16, color: Colors.grey)),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      // CartWidgetBodyState.cartItems.removeAt(index);
+                      context
+                          .read<CartsCubit>()
+                          .removeFromCart(CartWidgetBodyState.cartItems[index]);
+                      setState(() {});
+                    },
+                    child: Text("Remove"),
+                  ),
+                );
+              },
             ),
           ),
-        ),
-      ],
+          SafeArea(
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStatePropertyAll<Color>(Colors.orange.shade100)),
+              onPressed: () {},
+              child: Text(
+                'Checkout',
+                style: AppTextStyles.bold(color: Colors.black, fontSize: 17),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

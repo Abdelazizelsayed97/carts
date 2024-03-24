@@ -37,6 +37,7 @@ class CartsFailureState extends CartsState {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 class AddOrRemoveSuccessState extends CartsState {
+
   @override
   List<Object?> get props => [];
 }

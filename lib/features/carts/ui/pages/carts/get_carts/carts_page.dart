@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:product_cart/core/di/app_di.dart';
 import 'package:product_cart/core/helper/spacing.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
@@ -17,8 +16,7 @@ class CartsViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      lazy: false,
-      create: (context) => CartsCubit(getIt()),
+      create: (context) => CartsCubit(inject()),
       child: const CartsViewBody(),
     );
   }
@@ -32,33 +30,19 @@ class CartsViewBody extends StatefulWidget {
 }
 
 class _CartsViewBodyState extends State<CartsViewBody> {
-  int currentPage = 1;
   List<Carts> items = [];
   final _scrollController = ScrollController();
-  List cartProduct = [];
-
-  final PagingController<int, Carts> _pagingController =
-      PagingController(firstPageKey: 1, invisibleItemsThreshold: 10);
-
-  void onDataLoaded(CartsSuccessState state) async {
-    context.read<CartsCubit>().loadMoreCarts(limit: 10);
-    items.addAll(state.getPostState.dataItems);
-  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       context.read<CartsCubit>().fetchData(20).whenComplete(() {
         _scrollController.addListener(() {
           if (_scrollController.position.maxScrollExtent ==
               _scrollController.position.pixels) {
-            // final Future<List<Carts>?> newList =
             context.read<CartsCubit>().loadMoreCarts(limit: 10);
-            // items.addAll(newList);
           }
-          // loadMoreData();
         });
       });
     });
@@ -73,29 +57,31 @@ class _CartsViewBodyState extends State<CartsViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('i passed build widget');
-
     return Scaffold(
-      floatingActionButton: CartPreviewFloatingActionButton(),
+      floatingActionButton: CartPreviewFloatingActionButton(
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
       backgroundColor: Colors.orange.shade50,
       body: BlocConsumer<CartsCubit, CartsState>(
         listener: (context, state) {
           if (state is CartsLoadingState) {
-            Center(
+            Future.delayed(Duration(seconds: 3));
+            const Center(
               child: CircularProgressIndicator(),
             );
+          } else if (state is CartsFailureState) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Somthng Happened while loading Data')));
           }
         },
         builder: (BuildContext context, CartsState state) {
-          if (state is CartsFailureState) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.message)));
-          } else if (state is CartsSuccessState) {
+          if (state is CartsSuccessState) {
             items.addAll(state.getPostState.dataItems);
             return RefreshIndicator(
-              // edgeOffset: 100,
               onRefresh: () async {
-                onDataLoaded(state);
+                context.read<CartsCubit>().loadMoreCarts(limit: 10);
               },
               child: SingleChildScrollView(
                 controller: _scrollController,
