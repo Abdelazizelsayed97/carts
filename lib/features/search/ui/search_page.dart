@@ -36,7 +36,6 @@ class _SearchPageState extends State<SearchPage> {
             onTap: () {
               showSearch(
                   context: context, delegate: CartProductSearchDelegate(carts));
-              print('***************************${carts}');
             },
             cursorHeight: 30,
             decoration: const InputDecoration(

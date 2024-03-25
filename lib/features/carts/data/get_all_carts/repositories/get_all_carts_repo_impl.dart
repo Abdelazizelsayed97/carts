@@ -14,10 +14,6 @@ class GetAllCartsRepositoriesImpl implements GetCartsRepository {
 
   @override
   Future<Either<ApiError, PaginatedData<Carts>>> fetchData(int limit) async {
-    // final Uri uri =
-    //     Uri.parse('${ApiConstants.baseUrl}?limit=$limit&skip=0&total=20');
-    // final Uri uri = Uri.parse(ApiConstants.baseUrl);
-
     final response =
         await get(Uri.parse('${ApiConstants.baseUrl}?limit=$limit&skip=0'));
 

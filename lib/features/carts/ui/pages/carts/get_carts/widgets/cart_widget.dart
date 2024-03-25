@@ -41,7 +41,6 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('???##########################${cartItems}');
     return Container(
         decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
