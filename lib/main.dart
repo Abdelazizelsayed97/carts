@@ -17,12 +17,15 @@ class CartsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenUtilInit(
+    return  ScreenUtilInit(
       designSize: Size(375, 811),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: CartsViewPage(),
+      child: BlocProvider(
+        create: (context) => CartsCubit(inject()),
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            body: CartsViewPage(),
+          ),
         ),
       ),
     );

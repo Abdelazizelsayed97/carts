@@ -27,12 +27,12 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
   final List<Carts> products;
   final int indexed;
   final String text;
-  bool selected = true;
   final ExpansionTileController controller = ExpansionTileController();
   static List<Products> cartItems = [];
 
   CartWidgetBodyState(
       {required this.indexed, required this.text, required this.products});
+
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +47,6 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.all(Radius.circular(19))),
         child: ExpansionTile(
-
           shape: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(19),
@@ -76,16 +75,17 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
                       ),
                       trailing: AddRemoveButton(
                         element: products[indexed].items[index],
-                        onPressed: (selected) {
+                        onPressed: (bool) {
                           setState(() {
-                            selected != selected;
-                            selected
-                                ? context
+                            CartWidgetBodyState.cartItems
+                                    .contains(products[indexed].items[index])
+                                ? context.read<CartsCubit>().removeFromCart(
+                                    products[indexed].items[index])
+                                : context
                                     .read<CartsCubit>()
-                                    .addToCart(products[indexed].items[index])
-                                : context.read<CartsCubit>().removeFromCart(
-                                    products[indexed].items[index]);
+                                    .addToCart(products[indexed].items[index]);
                           });
+                          setState(() {});
                         },
                       ),
                       subtitle:

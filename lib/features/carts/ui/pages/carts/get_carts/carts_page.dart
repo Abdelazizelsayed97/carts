@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:product_cart/core/di/app_di.dart';
 import 'package:product_cart/core/helper/spacing.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/widgets/cart_widget.dart';
@@ -10,26 +9,16 @@ import 'package:product_cart/features/carts/ui/pages/carts/product_cart/cart_but
 import '../../../../../search/ui/search_page.dart';
 import '../../../../domain/get_all_carts/entities/get_all_carts_enitity.dart';
 
-class CartsViewPage extends StatelessWidget {
+
+
+class CartsViewPage extends StatefulWidget {
   const CartsViewPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CartsCubit(inject()),
-      child: const CartsViewBody(),
-    );
-  }
+  State<CartsViewPage> createState() => _CartsViewPageState();
 }
 
-class CartsViewBody extends StatefulWidget {
-  const CartsViewBody({super.key});
-
-  @override
-  State<CartsViewBody> createState() => _CartsViewBodyState();
-}
-
-class _CartsViewBodyState extends State<CartsViewBody> {
+class _CartsViewPageState extends State<CartsViewPage> {
   List<Carts> items = [];
   final _scrollController = ScrollController();
 
@@ -50,7 +39,6 @@ class _CartsViewBodyState extends State<CartsViewBody> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }

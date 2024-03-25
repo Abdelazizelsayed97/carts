@@ -9,8 +9,10 @@ import '../get_carts/widgets/cart_widget.dart';
 
 class CartPreviewFloatingActionButton extends StatelessWidget {
   final VoidCallback onTap;
+
   const CartPreviewFloatingActionButton({
-    super.key, required this.onTap,
+    super.key,
+    required this.onTap,
   });
 
   @override
@@ -48,9 +50,9 @@ class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           verticalSpace(20),
-          const Text(
-            'Cart Preview',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Text(
+            'Cart',
+            style: AppTextStyles.bold(fontSize: 24),
           ),
           verticalSpace(20),
           Expanded(
@@ -69,13 +71,16 @@ class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
                           fontSize: 16, color: Colors.grey)),
                   trailing: ElevatedButton(
                     onPressed: () {
-                      // CartWidgetBodyState.cartItems.removeAt(index);
                       context
                           .read<CartsCubit>()
                           .removeFromCart(CartWidgetBodyState.cartItems[index]);
                       setState(() {});
                     },
-                    child: Text("Remove"),
+                    child: Text(
+                      "Remove",
+                      style:
+                          AppTextStyles.normal(fontSize: 16, color: Colors.red),
+                    ),
                   ),
                 );
               },
@@ -84,8 +89,9 @@ class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
           SafeArea(
             child: ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll<Color>(Colors.orange.shade100)),
+                backgroundColor:
+                    MaterialStatePropertyAll<Color>(Colors.orange.shade100),
+              ),
               onPressed: () {},
               child: Text(
                 'Checkout',
