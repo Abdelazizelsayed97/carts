@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/widgets/cart_widget.dart';
 
 import '../../../../../../core/helper/pagination.dart';
@@ -13,6 +13,7 @@ part 'carts_state.dart';
 
 class CartsCubit extends Cubit<CartsState> {
   final GetCartsUseCase getAllCartsUseCase;
+  final List<Products> product = [];
 
   CartsCubit(this.getAllCartsUseCase) : super(CartsInitialState());
 
@@ -25,9 +26,11 @@ class CartsCubit extends Cubit<CartsState> {
         emit(CartsFailureState(message: l.message ?? ""));
       },
       (r) async {
-        emit(CartsSuccessState(
-          r,
-        ));
+        emit(
+          CartsSuccessState(
+            r,
+          ),
+        );
       },
     );
   }
@@ -49,6 +52,18 @@ class CartsCubit extends Cubit<CartsState> {
   }
 
   void removeFromCart(Products item) {
-      CartWidgetBodyState.cartItems.remove(item);
+    CartWidgetBodyState.cartItems.remove(item);
+  }
+
+  void addAndRemoveFromCart(Products item) {
+    if (product.contains(item)) {
+      product.remove(item);
+      print('$product');
+      emit(RemoveSuccessState(product));
+    } else {
+      product.add(item);
+      print('$product');
+      emit(AddSuccessState(product));
+    }
   }
 }

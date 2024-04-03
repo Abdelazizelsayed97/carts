@@ -61,7 +61,7 @@ class _CartsViewPageState extends State<CartsViewPage> {
             );
           } else if (state is CartsFailureState) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Somthng Happened while loading Data')));
+                content: Text('Something Happened while loading Data')));
           }
         },
         builder: (BuildContext context, CartsState state) {
