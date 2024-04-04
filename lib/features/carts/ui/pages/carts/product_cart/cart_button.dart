@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_cart/core/helper/spacing.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 
 import '../../../../../../core/di/app_di.dart';
@@ -35,13 +36,17 @@ class CartPreviewFloatingActionButton extends StatelessWidget {
 }
 
 class CartPreviewBottomSheet extends StatefulWidget {
-  const CartPreviewBottomSheet();
+  const CartPreviewBottomSheet({super.key});
 
   @override
   State<CartPreviewBottomSheet> createState() => _CartPreviewBottomSheetState();
 }
 
 class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
+  void addAndRemove(Products product) {
+    BlocProvider.of<CartsCubit>(context).addAndRemoveFromCart(product);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -57,23 +62,24 @@ class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
           verticalSpace(20),
           Expanded(
             child: ListView.builder(
-              itemCount: CartWidgetBodyState.cartItems.length,
+              itemCount: context.read<CartsCubit>().product.length,
               itemBuilder: (context, index) {
+                final items = context.read<CartsCubit>().product[index];
                 return ListTile(
                   title: Text(
-                    "${CartWidgetBodyState.cartItems[index].title}",
+                    "${context.read<CartsCubit>().product[index].title}",
                     style:
                         AppTextStyles.normal(fontSize: 17, color: Colors.black),
                   ),
                   subtitle: Text(
-                      'Price:${CartWidgetBodyState.cartItems[index].price}',
+                      'Price:${context.read<CartsCubit>().product[index].price}',
                       style: AppTextStyles.normal(
                           fontSize: 16, color: Colors.grey)),
                   trailing: ElevatedButton(
                     onPressed: () {
                       context
                           .read<CartsCubit>()
-                          .removeFromCart(CartWidgetBodyState.cartItems[index]);
+                          .product.remove(items);
                       setState(() {});
                     },
                     child: Text(

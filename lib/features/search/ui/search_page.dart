@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:product_cart/features/search/ui/widgets/search_widget.dart';
 
-import '../../carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import '../../carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 
 class SearchPage extends StatefulWidget {
   final List<Carts> carts;

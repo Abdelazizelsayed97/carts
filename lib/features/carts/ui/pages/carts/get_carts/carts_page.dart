@@ -7,9 +7,7 @@ import 'package:product_cart/features/carts/ui/pages/carts/get_carts/widgets/car
 import 'package:product_cart/features/carts/ui/pages/carts/product_cart/cart_button.dart';
 
 import '../../../../../search/ui/search_page.dart';
-import '../../../../domain/get_all_carts/entities/get_all_carts_enitity.dart';
-
-
+import '../../../../domain/get_all_carts/entities/get_all_carts_entity.dart';
 
 class CartsViewPage extends StatefulWidget {
   const CartsViewPage({super.key});
@@ -35,6 +33,7 @@ class _CartsViewPageState extends State<CartsViewPage> {
         });
       });
     });
+    print('this is init state');
   }
 
   @override
@@ -55,7 +54,7 @@ class _CartsViewPageState extends State<CartsViewPage> {
       body: BlocConsumer<CartsCubit, CartsState>(
         listener: (context, state) {
           if (state is CartsLoadingState) {
-            Future.delayed(Duration(seconds: 3));
+            Future.delayed(const Duration(seconds: 3));
             const Center(
               child: CircularProgressIndicator(),
             );

@@ -3,21 +3,21 @@ import 'package:http/http.dart';
 import 'package:product_cart/core/constants/constants.dart';
 import 'package:product_cart/core/error_handler/error_handler.dart';
 import 'package:product_cart/features/carts/data/get_all_carts/mapper/carts_maper.dart';
-import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/repositories/get_all_carts_abstract_repo.dart';
 
 import '../../../../../core/helper/pagination.dart';
 import '../models/get_all_carts.dart';
 
 class GetAllCartsRepositoriesImpl implements GetCartsRepository {
-  GetAllCartsRepositoriesImpl();
+
 
   @override
   Future<Either<ApiError, PaginatedData<Carts>>> fetchData(int limit) async {
     final response =
         await get(Uri.parse('${ApiConstants.baseUrl}?limit=$limit&skip=0'));
 
-    if (response == null) {
+    if (response == false) {
       throw Exception();
     } else {
       try {

@@ -22,10 +22,10 @@ class CartsCubit extends Cubit<CartsState> {
     final response = await getAllCartsUseCase.fetchData(limit: limit, skip: 0);
     emit(CartsLoadingState());
     response.fold(
-      (l) {
+          (l) {
         emit(CartsFailureState(message: l.message ?? ""));
       },
-      (r) async {
+          (r) async {
         emit(
           CartsSuccessState(
             r,
@@ -41,29 +41,23 @@ class CartsCubit extends Cubit<CartsState> {
       skip: 0,
     );
     newCarts.fold((l) => emit(CartsFailureState(message: l.message ?? "")),
-        (r) async {
-      emit(CartsSuccessState(r));
-    });
+            (r) async {
+          emit(CartsSuccessState(r));
+        });
     return null;
   }
 
-  void addToCart(Products item) {
-    CartWidgetBodyState.cartItems.add(item);
-  }
-
-  void removeFromCart(Products item) {
-    CartWidgetBodyState.cartItems.remove(item);
-  }
-
-  void addAndRemoveFromCart(Products item) {
+  void addAndRemoveFromCart(Products item) async{
     if (product.contains(item)) {
-      product.remove(item);
-      print('$product');
+     product.remove(item);
+      print('Item Removed >>>>>>>>>>>>$product');
       emit(RemoveSuccessState(product));
+      fetchData(10);
     } else {
       product.add(item);
-      print('$product');
+      print('Item Add>>>>>>>>$product');
       emit(AddSuccessState(product));
+      emit(CartsSuccessState());
     }
   }
 }

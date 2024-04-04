@@ -1,4 +1,4 @@
-import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 
 import '../models/get_all_carts.dart';
 

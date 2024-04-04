@@ -38,7 +38,7 @@ class CartsFailureState extends CartsState {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 class AddSuccessState extends CartsState {
-  final List <Products> product;
+  final List<Products> product;
 
   AddSuccessState(this.product);
 
@@ -47,7 +47,7 @@ class AddSuccessState extends CartsState {
 }
 
 class RemoveSuccessState extends CartsState {
-  final List <Products> product;
+  final List<Products> product;
 
   RemoveSuccessState(this.product);
 

@@ -18,7 +18,7 @@ class CartsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  ScreenUtilInit(
-      designSize: Size(375, 811),
+      designSize: const Size(375, 811),
       child: BlocProvider(
         create: (context) => CartsCubit(inject()),
         child: const MaterialApp(

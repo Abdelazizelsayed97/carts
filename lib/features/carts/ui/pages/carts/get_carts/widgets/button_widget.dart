@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_enitity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:product_cart/core/text_styles/app_text_styles.dart';
+import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
 
+import '../carts_cubit.dart';
 import 'cart_widget.dart';
 
 class AddRemoveButton extends StatefulWidget {
@@ -38,17 +41,19 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
         });
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: CartWidgetBodyState.cartItems.contains(widget.element)
+        backgroundColor:  context.read<CartsCubit>().product.contains(widget.element)
             ? Colors.red
             : Colors.green,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
       child: Text(
-        CartWidgetBodyState.cartItems.contains(widget.element)
+        context.read<CartsCubit>().product.contains(widget.element)
+
             ? 'Remove from Cart'
             : 'Add to Cart',
-        style: const TextStyle(color: Colors.white),
+        style: AppTextStyles.normal(fontSize: 16,color: Colors.white),
       ),
     );
   }
 }
+
