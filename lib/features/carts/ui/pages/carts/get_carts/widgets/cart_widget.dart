@@ -30,11 +30,17 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
   @override
   void initState() {
     super.initState();
-    controller = ExpansionTileController(); // Initialize the controller
+    controller = ExpansionTileController();
+  }
+
+  void fetchData() {
+    setState(() {
+      context.read<CartsCubit>().fetchData(20);
+    });
   }
 
   void addAndRemove(Products product) {
-    BlocProvider.of<CartsCubit>(context).addAndRemoveFromCart(product);
+  context.read<CartsCubit>().addAndRemoveFromCart(product);
   }
 
   @override
@@ -58,40 +64,48 @@ class CartWidgetBodyState extends State<CartWidgetBody> {
         children: [
           Column(
             children: [
-              ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Align(
-                      alignment: Alignment.topLeft,
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(
-                          widget.carts[widget.indexed].items[index].thumbnail
-                              .toString(),
+              BlocListener<CartsCubit, CartsState>(
+                listener: (context, state) {
+                  if (state is AddOrRemoveSuccessState) {
+                    // fetchData();
+                  }
+
+                },
+                child: ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+
+                    return ListTile(
+                      title: Align(
+                        alignment: Alignment.topLeft,
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: NetworkImage(
+                            widget.carts[widget.indexed].items[index].thumbnail
+                                .toString(),
+                          ),
                         ),
                       ),
-                    ),
-                    trailing: AddRemoveButton(
-                      element: widget.carts[widget.indexed].items[index],
-                      onPressed: (bool bool) {
-                        setState(() {
-                          addAndRemove(
-                              widget.carts[widget.indexed].items[index]);
-                        });
-                        setState(() {});
-                      },
-                    ),
-                    subtitle: Text(
-                      widget.carts[widget.indexed].items[index].title ?? "",
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return verticalSpace(20);
-                },
-                itemCount: widget.carts[widget.indexed].items.length,
+                      trailing: AddRemoveButton(
+                        element: widget.carts[widget.indexed].items[index],
+                        onPressed: () {
+                          setState(() {
+                            addAndRemove(
+                                widget.carts[widget.indexed].items[index]);
+                          });
+                        },
+                      ),
+                      subtitle: Text(
+                        widget.carts[widget.indexed].items[index].title ?? "",
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return verticalSpace(20);
+                  },
+                  itemCount: widget.carts[widget.indexed].items.length,
+                ),
               ),
             ],
           ),

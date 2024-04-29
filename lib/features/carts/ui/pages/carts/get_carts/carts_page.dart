@@ -17,7 +17,6 @@ class CartsViewPage extends StatefulWidget {
 }
 
 class _CartsViewPageState extends State<CartsViewPage> {
-  List<Carts> items = [];
   final _scrollController = ScrollController();
 
   @override
@@ -33,7 +32,14 @@ class _CartsViewPageState extends State<CartsViewPage> {
         });
       });
     });
-    print('this is init state');
+    void loadMore() {
+      _scrollController.addListener(() {
+        if (_scrollController.position.maxScrollExtent ==
+            _scrollController.position.pixels) {
+          context.read<CartsCubit>().loadMoreCarts(limit: 10);
+        }
+      });
+    }
   }
 
   @override
@@ -59,13 +65,14 @@ class _CartsViewPageState extends State<CartsViewPage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is CartsFailureState) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Something Happened while loading Data')));
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('There Is no Data To show')));
           }
         },
         builder: (BuildContext context, CartsState state) {
+          print('state is ${state.toString()}');
           if (state is CartsSuccessState) {
-            items.addAll(state.getPostState.dataItems);
+            List<Carts> items = state.getPostState?.dataItems ?? [];
             return RefreshIndicator(
               onRefresh: () async {
                 context.read<CartsCubit>().loadMoreCarts(limit: 10);
@@ -116,7 +123,8 @@ class _CartsViewPageState extends State<CartsViewPage> {
               ),
             );
           }
-          return const SizedBox.shrink();
+
+          return SizedBox.shrink();
         },
       ),
     );

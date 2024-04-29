@@ -7,8 +7,7 @@ import '../carts_cubit.dart';
 import 'cart_widget.dart';
 
 class AddRemoveButton extends StatefulWidget {
-  final Function(bool) onPressed;
-  final bool isAdded = false;
+  final Function onPressed;
   final Products element;
 
   const AddRemoveButton({
@@ -22,13 +21,11 @@ class AddRemoveButton extends StatefulWidget {
 }
 
 class _AddRemoveButtonState extends State<AddRemoveButton> {
-  late bool _isAdded;
   late List<bool> isInCart;
 
   @override
   void initState() {
     super.initState();
-    _isAdded = widget.isAdded;
   }
 
   @override
@@ -36,8 +33,7 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          _isAdded = !_isAdded;
-          widget.onPressed(_isAdded);
+          widget.onPressed();
         });
       },
       style: ElevatedButton.styleFrom(

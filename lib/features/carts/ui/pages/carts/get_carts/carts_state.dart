@@ -15,20 +15,36 @@ class CartsLoadingState extends CartsState {
 }
 
 class CartsSuccessState extends CartsState {
-  final PaginatedData<Carts> getPostState;
+  final PaginatedData<Carts>? getPostState;
+  final List<Products>? product;
 
-  CartsSuccessState(
+  // final List<Products>? removedProducts;
+
+  CartsSuccessState({
     this.getPostState,
-  );
+    this.product,
+  });
+
+  CartsSuccessState reduce({
+    PaginatedData<Carts>? getPostState,
+    List<Products>? product,
+    List<Products>? removedProducts,
+  }) {
+    return CartsSuccessState(
+      product: product ?? this.product,
+      getPostState: getPostState ?? this.getPostState,
+    );
+  }
 
   @override
   List<Object?> get props => [
         getPostState,
+        product,
       ];
 }
 
 class CartsFailureState extends CartsState {
-  final String message;
+  final Text message;
 
   CartsFailureState({required this.message});
 
@@ -37,19 +53,10 @@ class CartsFailureState extends CartsState {
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-class AddSuccessState extends CartsState {
+class AddOrRemoveSuccessState extends CartsState {
   final List<Products> product;
 
-  AddSuccessState(this.product);
-
-  @override
-  List<Object?> get props => [product];
-}
-
-class RemoveSuccessState extends CartsState {
-  final List<Products> product;
-
-  RemoveSuccessState(this.product);
+  AddOrRemoveSuccessState(this.product);
 
   @override
   List<Object?> get props => [product];

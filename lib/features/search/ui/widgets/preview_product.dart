@@ -11,12 +11,12 @@ class PreviewProducts extends StatelessWidget {
 
   final Products product;
 
-  // Future <void> addAndRemove ()async {
-  //    BlocProvider.of<CartsCubit>().product.contains(product)? context.read<CartsCubit>().
-  //  }
-
   @override
   Widget build(BuildContext context) {
+    void addAndRemove(Products product) {
+      context.read<CartsCubit>().addAndRemoveFromCart(product);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title ?? ''),
@@ -36,13 +36,15 @@ class PreviewProducts extends StatelessWidget {
                 style:
                     AppTextStyles.normal(color: Colors.grey[600], fontSize: 14),
               ),
-              trailing: AddRemoveButton(
-                onPressed: (bool bool) {
-                  context.read<CartsCubit>().addAndRemoveFromCart(product);
-                  print(
-                      '5555555555555${context.read<CartsCubit>().product.contains(product)}');
+              trailing: BlocListener<CartsCubit, CartsState>(
+                listener: (context, state) {
                 },
-                element: product,
+                child: AddRemoveButton(
+                  onPressed: () {
+                    addAndRemove(product);
+                  },
+                  element: product,
+                ),
               )),
         ],
       ),
