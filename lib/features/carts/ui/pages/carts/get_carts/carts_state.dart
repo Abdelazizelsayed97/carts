@@ -15,7 +15,7 @@ class CartsLoadingState extends CartsState {
 }
 
 class CartsSuccessState extends CartsState {
-  final PaginatedData<Carts>? getPostState;
+  final List<Carts>? getPostState;
   final List<Products>? product;
 
   // final List<Products>? removedProducts;
@@ -26,7 +26,7 @@ class CartsSuccessState extends CartsState {
   });
 
   CartsSuccessState reduce({
-    PaginatedData<Carts>? getPostState,
+    List<Carts>? getPostState,
     List<Products>? product,
     List<Products>? removedProducts,
   }) {

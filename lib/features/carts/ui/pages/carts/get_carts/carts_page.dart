@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:product_cart/core/helper/spacing.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/carts_cubit.dart';
 import 'package:product_cart/features/carts/ui/pages/carts/get_carts/widgets/cart_widget.dart';
@@ -22,24 +21,18 @@ class _CartsViewPageState extends State<CartsViewPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      context.read<CartsCubit>().fetchData(20).whenComplete(() {
-        _scrollController.addListener(() {
-          if (_scrollController.position.maxScrollExtent ==
-              _scrollController.position.pixels) {
-            context.read<CartsCubit>().loadMoreCarts(limit: 10);
-          }
-        });
-      });
+
+    final fetch = context.read<CartsCubit>().fetchData(20);
+    loadMore();
+  }
+
+  void loadMore() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        context.read<CartsCubit>().loadMoreCarts(limit: 10);
+      }
     });
-    void loadMore() {
-      _scrollController.addListener(() {
-        if (_scrollController.position.maxScrollExtent ==
-            _scrollController.position.pixels) {
-          context.read<CartsCubit>().loadMoreCarts(limit: 10);
-        }
-      });
-    }
   }
 
   @override
@@ -53,26 +46,26 @@ class _CartsViewPageState extends State<CartsViewPage> {
     return Scaffold(
       floatingActionButton: CartPreviewFloatingActionButton(
         onTap: () {
-          Navigator.pop(context);
+          // Navigator.pop(context);
         },
       ),
       backgroundColor: Colors.orange.shade50,
       body: BlocConsumer<CartsCubit, CartsState>(
         listener: (context, state) {
-          if (state is CartsLoadingState) {
-            Future.delayed(const Duration(seconds: 3));
-            const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is CartsFailureState) {
+          if (state is CartsFailureState) {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('There Is no Data To show')));
           }
         },
         builder: (BuildContext context, CartsState state) {
           print('state is ${state.toString()}');
-          if (state is CartsSuccessState) {
-            List<Carts> items = state.getPostState?.dataItems ?? [];
+          if (state is CartsLoadingState) {
+            Future.delayed(const Duration(seconds: 3));
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is CartsSuccessState) {
+            List<Carts> items = context.read<CartsCubit>().cartData ?? [];
             return RefreshIndicator(
               onRefresh: () async {
                 context.read<CartsCubit>().loadMoreCarts(limit: 10);
@@ -101,16 +94,10 @@ class _CartsViewPageState extends State<CartsViewPage> {
                               indexed: index,
                             );
                           } else {
-                            return SizedBox(
-                              width: 30.w,
-                              height: 30.h,
-                              child: const Center(
-                                heightFactor: 30,
-                                widthFactor: 30,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.black38),
-                                ),
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.black38),
                               ),
                             );
                           }

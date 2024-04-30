@@ -4,39 +4,32 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:product_cart/features/carts/domain/get_all_carts/entities/get_all_carts_entity.dart';
-
-import '../../../../../../core/helper/pagination.dart';
 import '../../../../domain/get_all_carts/use_cases/get_all_carts_use_case.dart';
 
 part 'carts_state.dart';
 
 class CartsCubit extends Cubit<CartsState> {
-  final GetCartsUseCase getAllCartsUseCase;
+  final GetCartsUseCase _getAllCartsUseCase;
   final List<Products> product = [];
-  late final PaginatedData<Carts> allProduct;
+  final List<Carts>? cartData = [];
 
-  CartsCubit(this.getAllCartsUseCase) : super(CartsInitialState());
+  CartsCubit(this._getAllCartsUseCase) : super(CartsInitialState());
 
   Future<void> fetchData(int limit) async {
+    emit(CartsLoadingState());
     print('fetchData');
-    // emit(CartsInitialState());
     try {
       final response =
-          await getAllCartsUseCase.fetchData(limit: limit, skip: 0);
-      // emit(CartsLoadingState());
+          await _getAllCartsUseCase.fetchData(limit: limit, skip: 0);
+
       print('---------------------');
       response.fold(
         (l) {
           emit(CartsFailureState(message: const Text('No Found Data')));
         },
         (r) async {
-          emit(
-            CartsSuccessState(
-              getPostState: r,
-            ),
-          );
-
-          allProduct = r;
+          emit(CartsSuccessState(getPostState: r.dataItems));
+          cartData?.addAll(r.dataItems);
         },
       );
     } catch (e) {
@@ -44,17 +37,18 @@ class CartsCubit extends Cubit<CartsState> {
     }
   }
 
-  Future<List<Carts>?> loadMoreCarts({required int limit}) async {
-    final newCarts = await getAllCartsUseCase.fetchData(
+  Future<void> loadMoreCarts({required int limit}) async {
+    final newCarts = await _getAllCartsUseCase.fetchData(
       limit: limit,
       skip: 0,
     );
+    final newState = state as CartsSuccessState;
     newCarts.fold(
         (l) => emit(CartsFailureState(message: const Text('No Found Data'))),
         (r) async {
-      emit(CartsSuccessState(getPostState: r));
+      emit(CartsSuccessState(getPostState: r.dataItems));
+      cartData?.addAll(r.dataItems);
     });
-    return null;
   }
 
   void addAndRemoveFromCart(Products item) async {
@@ -77,15 +71,14 @@ class CartsCubit extends Cubit<CartsState> {
     }
   }
 
-  void deleteItem(Carts item) {
-    if(state is CartsSuccessState){
-      final states = state as CartsSuccessState;
-      final newState = states.getPostState;
-      if (newState!.dataItems.contains(item)) {
-        newState.dataItems.remove(item);
-        emit(CartsSuccessState(getPostState: newState,product: product));
-      }
-    }
-
-  }
+  // void deleteItem(Carts item) {
+  //   if (state is CartsSuccessState) {
+  //     final states = state as CartsSuccessState;
+  //     final newState = states.getPostState;
+  //     if (newState!.contains(item)) {
+  //       newState.remove(item);
+  //       emit(CartsSuccessState(getPostState: newState, product: product));
+  //     }
+  //   }
+  // }
 }

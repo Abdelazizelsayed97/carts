@@ -43,7 +43,7 @@ class CartPreviewBottomSheet extends StatefulWidget {
 
 class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
   void addAndRemoveProduct(Products product) {
-    BlocProvider.of<CartsCubit>(context).addAndRemoveFromCart(product);
+    context.read<CartsCubit>().addAndRemoveFromCart(product);
   }
 
   @override
@@ -62,44 +62,36 @@ class _CartPreviewBottomSheetState extends State<CartPreviewBottomSheet> {
           ),
           verticalSpace(20),
           Expanded(
-            child: BlocBuilder<CartsCubit, CartsState>(
-              builder: (context, state) {
-                if (state is AddOrRemoveSuccessState) {
-                  return ListView.builder(
-                    // shrinkWrap: true,
-                    itemCount: context.read<CartsCubit>().product.length,
-                    itemBuilder: (context, index) {
-                      final selectedItems = context.read<CartsCubit>().product;
-                      return ListTile(
-                        title: Text(
-                          state.product[index].title.toString(),
-                          style: AppTextStyles.normal(
-                              fontSize: 17, color: Colors.black),
-                        ),
-                        subtitle: Text(
-                          'Price:${selectedItems[index].price}',
-                          style: AppTextStyles.normal(
-                              fontSize: 16, color: Colors.grey),
-                        ),
-                        trailing: ElevatedButton(
-                          onPressed: () {
-                            // addAndRemoveProduct(state.product[index]);
-                            // context
-                            //     .read<CartsCubit>()
-                            //     .product
-                            //     .remove(selectedItems[index]);
-                          },
-                          child: Text(
-                            "Remove",
-                            style: AppTextStyles.normal(
-                                fontSize: 16, color: Colors.red),
-                          ),
-                        ),
-                      );
+            child: ListView.builder(
+              shrinkWrap: true,
+              // shrinkWrap: true,
+              itemCount: context.read<CartsCubit>().product.length,
+              itemBuilder: (context, index) {
+                print(
+                    'this is cubit product list ${context.read<CartsCubit>().product}');
+                final selectedItems = context.read<CartsCubit>().product;
+                return ListTile(
+                  title: Text(
+                    selectedItems[index].title ?? '',
+                    style:
+                        AppTextStyles.normal(fontSize: 17, color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Price:${selectedItems[index].price}',
+                    style:
+                        AppTextStyles.normal(fontSize: 16, color: Colors.grey),
+                  ),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      addAndRemoveProduct(selectedItems[index]);
                     },
-                  );
-                }
-                return SizedBox.shrink();
+                    child: Text(
+                      "Remove",
+                      style:
+                          AppTextStyles.normal(fontSize: 16, color: Colors.red),
+                    ),
+                  ),
+                );
               },
             ),
           ),
